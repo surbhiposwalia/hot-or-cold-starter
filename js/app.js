@@ -10,20 +10,39 @@ $(document).ready(function() {
     $("a.close").click(function() {
         $(".overlay").fadeOut(1000);
     });
-    var number = getRandomNumber(1, 100);
-console.log(number);
-    var guess_num=parseInt(guess());
 
-    var difference = diff(guess_num, number);
-    feedback(difference);
+    // var guess_num = parseInt(guess());
+    var number = getRandomNumber(1, 100);
+    console.log(number);
+    var count = 0;
+
     $('#guessButton').click(function(event) {
         event.preventDefault();
-
-        var guess_num = guess();
-        console.log(guess_num);
+        game(number);
+        ClearGuess();
+        count += 1;
+        console.log(count);
+        $("#count").text(count);
     });
+    $('.new').click(function(){
+        location.reload();
+    })
 
 });
+
+
+function game(number) {
+
+    var guess_num = parseInt(guess());
+    console.log(guess_num);
+    var difference = diff(guess_num, number);
+    console.log(difference)
+    feedback(difference);
+    $('.guessBox').append("<li>" + guess_num + "</li>");
+
+}
+
+
 //to get the input value from the text box "enter your guess"
 function guess() {
     var num = $('#userGuess').val();
@@ -38,50 +57,35 @@ function diff(guess_num, num) {
 function getRandomNumber(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1))+min;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function feedback(diff) {
-
-    if ((diff >= 30) && (diff <=50)) {
+function feedback(difference) {
+    if (difference == 0) {
+        $('h2#feedback').text("Congratulations you guessed correctly!!");
+    } else if ((difference >= 30) && (difference <= 50)) {
         $('h2#feedback').text("cold");
-    }
-    if ((diff >= 20) && (diff < 30)) {
+    } else if ((difference >= 20) && (difference < 30)) {
         $('h2#feedback').text("warm");
-
-    }
-    if ((diff >= 10) && (diff < 20)) {
-
+    } else if ((difference >= 10) && (difference < 20)) {
         $('h2#feedback').text("hot");
-
-    }
-    if ((diff >= 1) && (diff < 10)) {
+    } else if ((difference >= 1) && (difference < 10)) {
         $('h2#feedback').text("very hot");
-
-
-    }
-    if (diff > 50) {
+    } else if (difference > 50) {
         $('h2#feedback').text("Ice cold");
-
-
+    } else {
+        $('h2#feedback').text("Invalid");
     }
 
+}
+var ClearGuess = function() {
+
+    $("#userGuess").val("").focus();
+    //function to clear guess text section
 }
 
 
 
-//     var ClearGuess = function() {
 
-//             $("#userGuess").val("").focus();
 
-//             //function to clear guess text section
-
-// }
-
-//             var guessCount = function() {
-
-//                 $("#count").text(guessCount);
-
-//                 //function to keep track of the number of guesses
-
-//             };
+//function to keep track of the number of guesses
